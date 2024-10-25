@@ -13,7 +13,7 @@ import (
 )
 
 // JAILER CONFIGURATION
-func ExampleJailerConfig_enablingJailer() {
+func JailerEnabledVM() {
 	UID := 123
 	GID := 100
 	nsPath, err := CreateContainer("testVm")
