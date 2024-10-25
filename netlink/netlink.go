@@ -27,6 +27,7 @@ func DefaultNetlinkOps() NetlinkOps {
 	return &defaultNetlinkOps{}
 }
 
+// Object := Add the redirect filter with queing discipline.
 func (ops *defaultNetlinkOps) AddTcRedirect(nsPath string, ethIface string, tuntapIface string) error {
 	ns, err := netns.GetFromPath(nsPath)
 	if err != nil {
@@ -67,6 +68,7 @@ func (ops *defaultNetlinkOps) AddTcRedirect(nsPath string, ethIface string, tunt
 	})
 }
 
+// Objective := Get the link interface from the main process namesapce.
 func (ops defaultNetlinkOps) GetLink(name string) (netlink.Link, error) {
 	link, err := netlink.LinkByName(name)
 	if _, ok := err.(netlink.LinkNotFoundError); ok {
@@ -75,6 +77,7 @@ func (ops defaultNetlinkOps) GetLink(name string) (netlink.Link, error) {
 	return link, nil
 }
 
+// Objective := Remove the link interface from the namespace where the main process is running.
 func (ops defaultNetlinkOps) RemoveLink(name string) error {
 	link, err := ops.GetLink(name)
 	if err != nil {
@@ -87,7 +90,7 @@ func (ops defaultNetlinkOps) RemoveLink(name string) error {
 	return err
 }
 
-// Add Ip addresses to the interface in the process namespace.
+// Objective := Add Ip addresses to the interface in the namespace where the main process is running.
 func (ops *defaultNetlinkOps) AddLinkIP(iface netlink.Link, ipAddr netlink.Addr) error {
 	logs.Logger.Info("Adding Address")
 	if err := netlink.AddrAdd(iface, &ipAddr); err != nil {
@@ -97,7 +100,8 @@ func (ops *defaultNetlinkOps) AddLinkIP(iface netlink.Link, ipAddr netlink.Addr)
 	return nil
 }
 
-// tc qdisc add dev $SRC_IFACE ingress
+// CMD := tc qdisc add dev $SRC_IFACE ingress
+// Objective := adding an ingress qdisc (querrying discipline) for the traffic filter.
 func addIngressQdisc(link netlink.Link) error {
 	qdisc := &netlink.Ingress{
 		QdiscAttrs: netlink.QdiscAttrs{
@@ -114,10 +118,11 @@ func addIngressQdisc(link netlink.Link) error {
 	return nil
 }
 
-// tc filter add dev $SRC_IFACE parent ffff:
+// CMD := tc filter add dev $SRC_IFACE parent ffff:
 // protocol all
 // u32 match u32 0 0
 // action mirred egress mirror dev $DST_IFACE
+// Objective := Filter the wildcard traffic from src interface to destination interface and mirror all the packets.
 func addRedirectFilter(linkSrc, linkDest netlink.Link) error {
 	filter := &netlink.U32{
 		FilterAttrs: netlink.FilterAttrs{

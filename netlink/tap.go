@@ -9,6 +9,7 @@ import (
 	"github.com/vishvananda/netns"
 )
 
+// Objective := Add the tap device in the namespace fetched from the namspace path.
 func (ops defaultNetlinkOps) AttachTap(nsPath string, tapName string, mtu int, ownerUID int, ownerGID int) error {
 	nsorigin, err := netns.Get()
 	if err != nil {
