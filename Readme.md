@@ -72,16 +72,16 @@ jailer_release                          --> jailer
 
 Parameters set in static configuration file for firecracker.
 ```
-    UID := 123
-	GID := 100
+UID := 123
+GID := 100
 
-	const id = "4580"
-	const socketPath = "api.socket"
-	const kernelImagePath = "./fc_kernel"
-	const rfsPath = "./fc_rfs"
-	const firecrackerPath = "./firecracker"
-	const jailerPath = "./jailer"
-	const ChrootBaseDir = "/srv/jailer"
+const id = "4580"
+const socketPath = "api.socket"
+const kernelImagePath = "./fc_kernel"
+const rfsPath = "./fc_rfs"
+const firecrackerPath = "./firecracker"
+const jailerPath = "./jailer"
+const ChrootBaseDir = "/srv/jailer"
     
 ```
 Note: 
@@ -95,7 +95,11 @@ ContainerId - randomly generated
 Ip address - "172.16.0.2"
 
 
-### To start the vm 
+## To start the vm 
 ```
 make run 
 ```
+
+## Environment Details
+
+Terminal stdio, stdout, stderr will be connected to microvm shell.
