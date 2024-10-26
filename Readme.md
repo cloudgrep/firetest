@@ -95,4 +95,7 @@ ContainerId - randomly generated
 Ip address - "172.16.0.2"
 
 
-
+### To start the vm 
+```
+make run 
+```

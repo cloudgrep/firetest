@@ -16,7 +16,7 @@ func JailerEnabledVM() {
 	UID := 123
 	GID := 100
 
-	const id = "4580"
+	const id = "4530"
 	const socketPath = "api.socket"
 	const kernelImagePath = "./fc_kernel"
 	const rfsPath = "./fc_rfs"
