@@ -9,6 +9,7 @@ import (
 
 	"github.com/firecracker-microvm/firecracker-go-sdk"
 	models "github.com/firecracker-microvm/firecracker-go-sdk/client/models"
+	"github.com/google/uuid"
 )
 
 // JAILER CONFIGURATION
@@ -16,13 +17,26 @@ func JailerEnabledVM() {
 	UID := 123
 	GID := 100
 
-	const id = "4530"
+	vmId := uuid.New()
+
+	id := vmId.String()
 	const socketPath = "api.socket"
 	const kernelImagePath = "./fc_kernel"
 	const rfsPath = "./fc_rfs"
 	const firecrackerPath = "./firecracker"
 	const jailerPath = "./jailer"
 	const ChrootBaseDir = "/srv/jailer"
+
+	// Owm the fc_kernel and fc_rfs by the uid and gid of the unauthorized usser
+	if err := os.Chown(kernelImagePath, UID, GID); err != nil {
+		fmt.Println("Error changing ownership of fc_kernel:", err)
+		return
+	}
+
+	if err := os.Chown(rfsPath, UID, GID); err != nil {
+		fmt.Println("Error changing ownership of fc_rfs:", err)
+		return
+	}
 
 	nsPath, err := CreateContainer("testVm")
 	if err != nil {
